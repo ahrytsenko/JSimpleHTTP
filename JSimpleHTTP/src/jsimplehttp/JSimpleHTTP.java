@@ -1,7 +1,6 @@
 
 package jsimplehttp;
-
-
+    
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -51,6 +50,26 @@ public class JSimpleHTTP implements AutoCloseable {
     }
     
     private void setRequestHeaders(HttpURLConnection httpURLConnection) {
+        // TODO: implement iteration through map keys and add headers
+    }
+    
+    public void clearRequestHeaders() {
+        // TODO: implement iteration through map keys and add headers
+    }
+    
+    public void addRequestHeaders(String headerName, String headerValue) {
+        // TODO: implement iteration through map keys and add headers
+    }
+    
+    public void addRequestHeaders(HashMap headers) {
+        // TODO: implement iteration through map keys and add headers
+    }
+    
+    public void replaceRequestHeaders(String headerName, String headerValue) {
+        // TODO: implement iteration through map keys and add headers
+    }
+    
+    public void replaceRequestHeaders(HashMap headers) {
         // TODO: implement iteration through map keys and add headers
     }
     
