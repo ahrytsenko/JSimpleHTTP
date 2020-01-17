@@ -1,6 +1,5 @@
-
 package jsimplehttp;
-    
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,22 +12,22 @@ public class JSimpleHTTP implements AutoCloseable {
 
     public static final boolean SAVE_REQUEST_HEADERS = true;
     public static final boolean DONOT_SAVE_REQUEST_HEADERS = !SAVE_REQUEST_HEADERS;
-    
+
     private URL url;
     private final String userAgent;
-    private HashMap requestHeader;
+    private HashMap<String, String> requestHeader;
     private String requestBody;
     private int responseCode;
     private String responceBody;
 
     public JSimpleHTTP() throws IOException {
-        this("NetBeans JavaFX");
+        this("Java API");
     }
 
     public JSimpleHTTP(String userAgent) throws IOException {
         this.userAgent = userAgent;
         requestHeader = new HashMap();
-        requestHeader.put("User-Agent", this.userAgent);
+        setDefaultRequestHeader();
     }
 
     @Override
@@ -40,44 +39,53 @@ public class JSimpleHTTP implements AutoCloseable {
     public void setRequestURL(String requestURL, boolean isSaveHeaders) throws IOException {
         this.url = new URL(requestURL);
         if (!isSaveHeaders) {
-            requestHeader.clear();
-            requestHeader.put("User-Agent", this.userAgent);
+            clearRequestHeaders();
         }
     }
 
     public void setRequestBody(String requestBody) throws IOException {
         this.requestBody = requestBody;
     }
-    
+
     private void setRequestHeaders(HttpURLConnection httpURLConnection) {
-        // TODO: implement iteration through map keys and add headers
+        requestHeader.forEach((k, v) -> httpURLConnection.setRequestProperty(k, v));
     }
-    
+
+    private void setDefaultRequestHeader() {
+        addRequestHeaders("User-Agent", this.userAgent);
+    }
+
     public void clearRequestHeaders() {
-        // TODO: implement iteration through map keys and add headers
+        requestHeader.clear();
+        setDefaultRequestHeader();
     }
-    
+
     public void addRequestHeaders(String headerName, String headerValue) {
-        // TODO: implement iteration through map keys and add headers
+        headerName = headerName.trim();
+        headerValue = headerValue.trim();
+        if (!headerName.isEmpty() && !headerValue.isEmpty()) {
+            requestHeader.put(headerName, headerValue);
+        }
     }
-    
-    public void addRequestHeaders(HashMap headers) {
-        // TODO: implement iteration through map keys and add headers
+
+    public void addRequestHeaders(HashMap<String, String> headers) {
+        headers.forEach((k, v) -> addRequestHeaders(k, v));
     }
-    
+
     public void replaceRequestHeaders(String headerName, String headerValue) {
-        // TODO: implement iteration through map keys and add headers
+        clearRequestHeaders();
+        addRequestHeaders(headerName, headerValue);
     }
-    
-    public void replaceRequestHeaders(HashMap headers) {
-        // TODO: implement iteration through map keys and add headers
+
+    public void replaceRequestHeaders(HashMap<String, String> headers) {
+        clearRequestHeaders();
+        addRequestHeaders(headers);
     }
-    
+
     public int sendGET() throws IOException {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
-        setRequestHeaders(con); 
-        con.setRequestProperty("User-Agent", userAgent);
+        setRequestHeaders(con);
         responseCode = con.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -91,8 +99,7 @@ public class JSimpleHTTP implements AutoCloseable {
             in.close();
 
             responceBody = response.toString();
-        }
-        else {
+        } else {
             responceBody = "";
         }
         return responseCode;
@@ -101,10 +108,10 @@ public class JSimpleHTTP implements AutoCloseable {
     public int sendPOST() throws IOException {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("POST");
-        con.setRequestProperty("User-Agent", userAgent);
-        con.setRequestProperty("Accept-Language", "uk-UA");
-        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-      
+        addRequestHeaders("Accept-Language", "uk-UA");
+        addRequestHeaders("Content-Type", "application/json; charset=UTF-8");
+        setRequestHeaders(con);
+        
         // For POST only - START
         con.setDoOutput(true);
         OutputStream os = con.getOutputStream();
@@ -127,8 +134,7 @@ public class JSimpleHTTP implements AutoCloseable {
             in.close();
 
             responceBody = response.toString();
-        }
-        else {
+        } else {
             responceBody = "";
         }
         return responseCode;
