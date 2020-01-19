@@ -19,7 +19,7 @@ public class JSimpleHTTP implements AutoCloseable {
     private HashMap<String, String> requestHeader;
     private String requestBody;
     private int responseCode;
-    private String responceBody;
+    private String responseBody;
 
     public JSimpleHTTP() throws IOException {
         this("Java API");
@@ -99,9 +99,9 @@ public class JSimpleHTTP implements AutoCloseable {
             }
             in.close();
 
-            responceBody = response.toString();
+            responseBody = response.toString();
         } else {
-            responceBody = "";
+            responseBody = "";
         }
         return responseCode;
     }
@@ -134,9 +134,9 @@ public class JSimpleHTTP implements AutoCloseable {
             }
             in.close();
 
-            responceBody = response.toString();
+            responseBody = response.toString();
         } else {
-            responceBody = "";
+            responseBody = "";
         }
         return responseCode;
     }
@@ -146,6 +146,6 @@ public class JSimpleHTTP implements AutoCloseable {
     }
 
     public String getResponseBody() {
-        return responceBody;
+        return responseBody;
     }
 }
