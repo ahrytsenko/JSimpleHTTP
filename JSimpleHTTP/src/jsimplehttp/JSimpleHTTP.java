@@ -1,11 +1,12 @@
+/**
+ * Idea was taken from JournalDev
+ * https://www.journaldev.com/7148/java-httpurlconnection-example-java-http-request-get-post
+ */
+
 package jsimplehttp;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 import java.util.*;
 
 public class JSimpleHTTP implements AutoCloseable {
