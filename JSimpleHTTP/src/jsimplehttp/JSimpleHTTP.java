@@ -2,7 +2,6 @@
  * Idea was taken from JournalDev
  * https://www.journaldev.com/7148/java-httpurlconnection-example-java-http-request-get-post
  */
-
 package jsimplehttp;
 
 import java.io.*;
@@ -83,6 +82,20 @@ public class JSimpleHTTP implements AutoCloseable {
         addRequestHeaders(headers);
     }
 
+    public void delRequestHeader(String headerName) {
+        if (requestHeader.containsKey(headerName)) {
+            requestHeader.remove(headerName);
+        }
+    }
+
+    public void delRequestHeader(HashMap<String, String> headers) {
+        headers.forEach((k, v) -> {
+            if (requestHeader.containsKey(k)) {
+                requestHeader.remove(k);
+            }
+        });
+    }
+
     public int sendGET() throws IOException {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -112,7 +125,7 @@ public class JSimpleHTTP implements AutoCloseable {
         addRequestHeaders("Accept-Language", "uk-UA");
         addRequestHeaders("Content-Type", "application/json; charset=UTF-8");
         setRequestHeaders(con);
-        
+
         // For POST only - START
         con.setDoOutput(true);
         OutputStream os = con.getOutputStream();
