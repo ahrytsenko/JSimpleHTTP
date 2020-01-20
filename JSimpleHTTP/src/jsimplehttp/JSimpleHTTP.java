@@ -82,13 +82,13 @@ public class JSimpleHTTP implements AutoCloseable {
         addRequestHeaders(headers);
     }
 
-    public void delRequestHeader(String headerName) {
+    public void delRequestHeaders(String headerName) {
         if (requestHeader.containsKey(headerName)) {
             requestHeader.remove(headerName);
         }
     }
 
-    public void delRequestHeader(HashMap<String, String> headers) {
+    public void delRequestHeaders(HashMap<String, String> headers) {
         headers.forEach((k, v) -> {
             if (requestHeader.containsKey(k)) {
                 requestHeader.remove(k);
