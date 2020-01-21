@@ -65,13 +65,13 @@ public class JSimpleHTTP implements AutoCloseable {
     }
 
     public JSimpleHTTP addRequestHeaders(HashMap<String, String> headers) {
-        headers.forEach((k, v) -> addRequestHeaders(k, v));
+        headers.forEach((k, v) -> addRequestHeader(k, v));
         return this;
     }
 
     public JSimpleHTTP replaceRequestHeader(String headerName, String headerValue) {
         clearRequestHeaders();
-        addRequestHeaders(headerName, headerValue);
+        addRequestHeader(headerName, headerValue);
         return this;
     }
 
