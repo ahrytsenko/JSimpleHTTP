@@ -36,64 +36,65 @@ public class JSimpleHTTP implements AutoCloseable {
         requestHeader = null;
     }
 
-    public void setRequestURL(String requestURL, boolean isSaveHeaders) throws IOException {
+    public JSimpleHTTP setRequestURL(String requestURL, boolean isSaveHeaders) throws IOException {
         this.url = new URL(requestURL);
         if (!isSaveHeaders) {
             clearRequestHeaders();
         }
+        return this;
     }
 
-    public void setRequestBody(String requestBody) throws IOException {
+    public JSimpleHTTP setRequestBody(String requestBody) throws IOException {
         this.requestBody = requestBody;
+        return this;
     }
 
-    private void setRequestHeaders(HttpURLConnection httpURLConnection) {
-        requestHeader.forEach((k, v) -> httpURLConnection.setRequestProperty(k, v));
-    }
-
-    private void setDefaultRequestHeader() {
-        addRequestHeaders("User-Agent", this.userAgent);
-    }
-
-    public void clearRequestHeaders() {
+    public JSimpleHTTP clearRequestHeaders() {
         requestHeader.clear();
         setDefaultRequestHeader();
+        return this;
     }
 
-    public void addRequestHeaders(String headerName, String headerValue) {
+    public JSimpleHTTP addRequestHeader(String headerName, String headerValue) {
         headerName = headerName.trim();
         headerValue = headerValue.trim();
         if (!headerName.isEmpty() && !headerValue.isEmpty()) {
             requestHeader.put(headerName, headerValue);
         }
+        return this;
     }
 
-    public void addRequestHeaders(HashMap<String, String> headers) {
+    public JSimpleHTTP addRequestHeaders(HashMap<String, String> headers) {
         headers.forEach((k, v) -> addRequestHeaders(k, v));
+        return this;
     }
 
-    public void replaceRequestHeaders(String headerName, String headerValue) {
+    public JSimpleHTTP replaceRequestHeader(String headerName, String headerValue) {
         clearRequestHeaders();
         addRequestHeaders(headerName, headerValue);
+        return this;
     }
 
-    public void replaceRequestHeaders(HashMap<String, String> headers) {
+    public JSimpleHTTP replaceRequestHeaders(HashMap<String, String> headers) {
         clearRequestHeaders();
         addRequestHeaders(headers);
+        return this;
     }
 
-    public void delRequestHeaders(String headerName) {
+    public JSimpleHTTP delRequestHeader(String headerName) {
         if (requestHeader.containsKey(headerName)) {
             requestHeader.remove(headerName);
         }
+        return this;
     }
 
-    public void delRequestHeaders(HashMap<String, String> headers) {
+    public JSimpleHTTP delRequestHeaders(HashMap<String, String> headers) {
         headers.forEach((k, v) -> {
             if (requestHeader.containsKey(k)) {
                 requestHeader.remove(k);
             }
         });
+        return this;
     }
 
     public int sendGET() throws IOException {
@@ -122,8 +123,6 @@ public class JSimpleHTTP implements AutoCloseable {
     public int sendPOST() throws IOException {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("POST");
-        addRequestHeaders("Accept-Language", "uk-UA");
-        addRequestHeaders("Content-Type", "application/json; charset=UTF-8");
         setRequestHeaders(con);
 
         // For POST only - START
@@ -160,5 +159,15 @@ public class JSimpleHTTP implements AutoCloseable {
 
     public String getResponseBody() {
         return responseBody;
+    }
+    
+    private JSimpleHTTP setDefaultRequestHeader() {
+        addRequestHeader("User-Agent", this.userAgent);
+        return this;
+    }
+
+    private JSimpleHTTP setRequestHeaders(HttpURLConnection httpURLConnection) {
+        requestHeader.forEach((k, v) -> httpURLConnection.setRequestProperty(k, v));
+        return this;
     }
 }
